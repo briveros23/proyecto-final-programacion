@@ -1,5 +1,7 @@
 import pandas as pd
 import csv
+import prince
+import plotly.express as px
 
 
 
@@ -26,3 +28,37 @@ def mapeo_datos(path_datos_ori,path_datos_mapeados,path_mapeo):
     df_performance
 
     df_performance.to_csv(path_datos_mapeados, index=False)
+
+
+def planos_factoriales(ACM,data,planos=[0,1]):
+    # Obtener los perfiles de fila y columna
+    row_profiles = ACM.row_coordinates(data)[planos]
+    col_profiles = ACM.column_coordinates(data)[planos]
+    # ponemos los index como una columna llamada individuo
+    row_profiles['nombre'] = row_profiles.index
+    col_profiles['nombre'] = col_profiles.index
+    # unimos los perfiles de fila y columna
+    df = pd.concat([row_profiles, col_profiles])
+    # añadimos una columna para diferenciar los perfiles de fila y columna
+    df['tipo'] = ['individuo']*len(row_profiles) + ['columna']*len(col_profiles)
+    # Cambiamos el nombre de las columnas
+    df.columns = ['x','y','nombre','tipo']
+    # retornamos el dataframe
+    return df
+
+def grafico_planos_factoriales(df,df_valores_porpios,planos=[0,1]):
+    # sacamos los pesos de cada eje
+    peso1 = df_valores_porpios.loc[planos[0],'% of variance']
+    peso2 = df_valores_porpios.loc[planos[1],'% of variance']
+    # Crear gráfico de dispersión
+    fig = px.scatter(df, x='x', y='y', color='tipo', title='Gráfico de Dispersión con Variable Cualitativa',hover_name='nombre')
+    # cambiamos tamaño
+    fig.update_layout(width=850, height=800)
+    # Añadir etiquetas a las columnas
+    fig.update_layout(
+        xaxis_title=f'Componente {str(planos[0]+1)} ({str(peso1)}%)',
+        yaxis_title=f'Componente {str(planos[1]+1)} ({str(peso2)}%)'
+    )
+
+    # Mostrar gráfico
+    fig.show()
