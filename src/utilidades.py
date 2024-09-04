@@ -2,6 +2,12 @@ import pandas as pd
 import csv
 import prince
 import plotly.express as px
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 
@@ -62,3 +68,51 @@ def grafico_planos_factoriales(df,df_valores_porpios,planos=[0,1]):
 
     # Mostrar gráfico
     fig.show()
+
+
+def entrenamiento_modelo(Modelo,x_entrenamiento,y_entrenamiento):
+    model = Modelo
+    model.fit(x_entrenamiento, y_entrenamiento)
+    return model
+
+def prediccion_modelo(modelo,x_prueba):
+    return modelo.predict(x_prueba)
+
+def evaluacion_modelo(y_prueba,y_pred):
+    accuracy = accuracy_score(y_prueba, y_pred)
+    conf_matrix = confusion_matrix(y_prueba, y_pred)
+    class_report = classification_report(y_prueba, y_pred)
+    print(f'class_report: {class_report}')
+    return [accuracy,conf_matrix]
+
+def grafico_los_coeficientes(modelo,data):
+    coefs = modelo.coef_
+
+    # Crear un gráfico para cada clase
+    n_classes = coefs.shape[0]
+    features = data.feature_names
+
+    plt.figure(figsize=(10, 6))
+
+    for i in range(n_classes):
+        plt.barh(np.arange(len(features)) + i * 0.25, coefs[i], height=0.25, label=f'Clase {i}')
+
+    # Configuraciones adicionales del gráfico
+    plt.yticks(np.arange(len(features)) + 0.25 * (n_classes - 1) / 2, features)
+    plt.xlabel('Coeficiente')
+    plt.title('Parámetros de la Regresión Logística para Cada Clase')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+def grafico_de_matriz(matriz,data):
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(matriz, annot=True, fmt="d", cmap="Blues", cbar=False,
+                xticklabels=data.target_names, yticklabels=data.target_names)
+
+    # Configuración de etiquetas y título
+    plt.xlabel('Predicted Class')
+    plt.ylabel('Actual Class')
+    plt.title('Matriz de Confusión Multiclase')
+    plt.show()

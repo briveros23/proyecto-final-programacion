@@ -3,8 +3,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
 def regresion_linear_y_evaluacion(df_performance):
-    X = df[['Student_Age', 'Additional_work', 'Graduated_high_school_type']]
-    y = df['Cumulative_GPA']
+    X = df_performance[['Student_Age', 'Additional_work', 'Graduated_high_school_type']]
+    y = df_performance['Cumulative_GPA']
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
