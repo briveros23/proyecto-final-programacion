@@ -1,0 +1,31 @@
+---
+title: "Caracterización y predicción del desempeño académico"
+author: "carlos, julian, maria, Bryan Riveros"
+format: revealjs
+---
+
+# Índice
+1. Problemática  
+2. Datos  
+3. Estadísticas descriptivas  
+4. Análisis de correspondencia múltiple  
+5. Regresión ordinal  
+6. Regresión logística  
+7. Resultados
+
+
+## Problemática 
+
+
+
+## Datos  
+
+## Estadísticas descriptivas  
+
+## Análisis de correspondencia múltiple  
+
+## Regresión ordinal  
+
+## Regresión logística  
+
+## Resultados
